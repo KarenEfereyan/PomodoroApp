@@ -5,23 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Karen's Pomodoro App</title>
     <link rel="stylesheet" href="./pomodoro.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.2/css/all.css"
+      rel="stylesheet"
+    />
   </head>
-  <body style="background-color: black;">
+  <body>
     <h1 style="text-align: center; color: white;">Karen's Pomodoro App</h1>
     <div id="pomodoro-container">
       <div id="pomodoro-clock">
         <!--This is the actual timer that will count down-->
         <div id="pomodoro-timer"></div>
+        <!--This allows us to enter text-->
+        <div>
+          <input
+            type="text"
+            id="pomodoro-task"
+            placeholder="Enter your task..."
+          />
+        </div>
         <!--This are the buttons that will strt,pause and stop the clock-->
         <div id="pomodoro-buttons">
-          <button id="pomodoro-start">Start</button>
-          <button id="pomodoro-pause">Pause</button>
-          <button id="pomodoro-stop">Stop</button>
+          <button id="pomodoro-start">
+            <i class="fas fa-play" id="play-icon"></i>
+            <i class="fas fa-pause hidden" id="pause-icon"></i>
+          </button>
+          <!-- <button id="pomodoro-pause">Pause</button> -->
+          <button id="pomodoro-stop" class="hidden">
+            <i class="fas fa-stop"></i>
+          </button>
+        </div>
+      </div>
+      <!--The title of the pomodoro-->
+      <div id="pomodoro-clock-title">
+        <span>
+          Changes made here will reflect at the start of the next work / break
+          session....
+        </span>
+      </div>
+      <div id="pomodoro-clock-actions">
+        <div class="pomodoro-input">
+          <label>Work Duration</label>
+          <input
+            name="input-work-duration"
+            id="input-work-duration"
+            type="number"
+          />
+        </div>
+        <div class="pomodoro-input">
+          <label>Break Duration</label>
+          <input
+            name="input-break-duration"
+            id="input-break-duration"
+            type="number"
+          />
         </div>
       </div>
       <!--This holds the logs of our pomodoro-->
       <div id="pomodoro-logs">
-        <h2>My Sessions</h2>
+        <h2 style="color: #fff;">My Sessions</h2>
+        <ul id="pomodoro-sessions"></ul>
       </div>
     </div>
 

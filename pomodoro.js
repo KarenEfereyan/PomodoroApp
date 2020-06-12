@@ -15,6 +15,7 @@ let timeLeftInSession = 1500; //25mins, this reduces as the clock counts down
 let breakSession = 300; //5mins, it can be changed as needed
 let sessionType = "Work"; //Is this a work or break session?
 let timeSpentInCurrentSession = 0; //This increases for every second spent in the currentSession
+let currentTaskTag = document.querySelector("#pomodoro-task");
 
 // Attach event listeners to all three buttons
 // START CLOCK BUTTON
@@ -82,6 +83,7 @@ function displayTimeLeftInSession() {
 
 //Function to stop the clock from running
 function stopClockRunning() {
+  displaySessionLog(sessionType);
   // 1) reset the timer
   clearInterval(clockStartRunning);
   // 2) update our variable to reflect that the timer is stopped
@@ -91,6 +93,7 @@ function stopClockRunning() {
   timeSpentInCurrentSession = 0;
   // update the timer display
   displayTimeLeftInSession();
+  sessionType = "Work";
 }
 
 //Function to toggle between work and break sessions
@@ -108,9 +111,15 @@ function toggleSessionType() {
       displaySessionLog("Work");
       //update the sessionType to break
       type = "Break";
+      currentTaskTag.value = "Break";
+      currentTaskTag.disabled = true;
     } else {
       timeLeftInSession = workSession;
-      type = "Work";
+      sessionType = "Work";
+      if (currentTaskTag.value === "Break") {
+        currentTaskTag.value = workSessionLabel;
+      }
+      currentTaskTag.disabled = false;
       displaySessionLog("Break");
     }
   }
@@ -122,7 +131,13 @@ function displaySessionLog(sessionType) {
   const pomoSessions = document.querySelector("#pomodoro-sessions");
   //Append list item
   const li = document.createElement("li");
-  let sessionTag = sessionType;
+  if (sessionType === "Work") {
+    sessionTag = currentTaskTag.value ? currentTaskTag.value : "Work";
+    workSessionLabel = sessionTag;
+  } else {
+    sessionTag = "Break";
+  }
+  //let sessionTag = sessionType;
   let elapsedTime = parseInt(timeSpentInCurrentSession / 60);
   elapsedTime = elapsedTime > 0 ? elapsedTime : "<1";
   const text = document.createTextNode(`${sessionTag} : ${elapsedTime} min`);

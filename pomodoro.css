@@ -1,6 +1,10 @@
 body {
-  background-color: wheat;
+  background-color: #000;
 }
 .hidden {
   display: none;
+}
+#pomodoro-timer {
+  width: 200px;
+  height: 200px;
 }

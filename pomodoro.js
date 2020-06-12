@@ -34,7 +34,7 @@ const progressBar = new ProgressBar.Circle("#pomodoro-timer", {
   text: {
     value: "25:00",
   },
-  trailColor: "#f4f4f4",
+  trailColor: "hotpink",
 });
 
 // Attach event listeners to all three buttons
@@ -92,6 +92,7 @@ function whatShouldIDo(reset) {
         //timeLeftInSession--;
         toggleSessionType();
         displayTimeLeftInSession();
+        progressBar.set(calculateSessionProgress());
       }, 1000);
       isClockRunning = true;
     }
@@ -116,7 +117,8 @@ function displayTimeLeftInSession() {
   }
   if (hours > 0) timeDisplayed += `${hours}:`;
   timeDisplayed += `${addLeadingZeroes(minutes)}:${addLeadingZeroes(seconds)}`;
-  pomoTimer.innerText = timeDisplayed.toString();
+  progressBar.text.innerText = timeDisplayed.toString();
+  // pomoTimer.innerText = timeDisplayed.toString();
 }
 
 //Function to stop the clock from running
@@ -229,4 +231,11 @@ function togglePlayPause(reset) {
 function showStopIcon() {
   const stopBtn = document.querySelector("#pomodoro-stop");
   stopBtn.classList.remove("hidden");
+}
+
+//Function to display the progress bar
+function calculateSessionProgress() {
+  //How fast is the session completing
+  const sessionDuration = sessionType === "Work" ? workSession : breakSession;
+  return (timeSpentInCurrentSession / sessionDuration) * 10;
 }

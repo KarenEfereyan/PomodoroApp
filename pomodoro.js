@@ -41,12 +41,13 @@ function whatShouldIDo(reset) {
   } else {
     if (isClockRunning === true) {
       //FUNCTION TO PAUSE THE CLOCK
+      clearInterval(clockStartRunning);
       isClockRunning = false;
     } else {
       //The clock is now running
       isClockRunning = true;
       //FUNCTION TO START THE CLOCK
-      clockStart = setInterval(() => {
+      clockStartRunning = setInterval(() => {
         // decrease time left in workSessionBy 1 for each second
         timeLeftInWorkSession--;
       }, 1000);

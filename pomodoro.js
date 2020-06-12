@@ -28,6 +28,15 @@ let breakTime = document.querySelector("#input-break-duration");
 workTime.value = "25"; //just set it to a string of 25mins
 breakTime.value = "5"; //set to a string of 5mins
 
+//ProgressBar Variables
+const progressBar = new ProgressBar.Circle("#pomodoro-timer", {
+  strokeWidth: 2,
+  text: {
+    value: "25:00",
+  },
+  trailColor: "#f4f4f4",
+});
+
 // Attach event listeners to all three buttons
 
 // START CLOCK BUTTON

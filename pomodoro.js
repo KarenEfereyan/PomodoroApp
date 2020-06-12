@@ -109,12 +109,11 @@ function displayTimeLeftInSession() {
 
 //Function to stop the clock from running
 function stopClockRunning() {
-  setUpdatedTimers(
-  )
+  setUpdatedTimers();
   displaySessionLog(sessionType);
   // 1) reset the timer
   clearInterval(clockStartRunning);
-  isClockStopped=true;
+  isClockStopped = true;
   // 2) update our variable to reflect that the timer is stopped
   isClockRunning = false;
   // set the timer back to the original value
@@ -179,19 +178,15 @@ function displaySessionLog(sessionType) {
 //Function to updateTimer to what the UserInputs
 //1. Check to see if there's an updated session duration for work and break
 //2. If yes, it sets the new work and break sessions to that value
-function setUpdatedTimers(){
+function setUpdatedTimers() {
   if (sessionType === "Work") {
-    timeLeftInSession= newWorkSession
-      ? newWorkSession
-      : workSession
+    timeLeftInSession = newWorkSession ? newWorkSession : workSession;
     workSession = timeLeftInSession;
   } else {
-    timeLeftInSession = newBreakSession
-      ? newBreakSession
-      : breakSession
+    timeLeftInSession = newBreakSession ? newBreakSession : breakSession;
     breakSession = timeLeftInSession;
   }
-};
+}
 
 //Function to change the string minutes to seconds
 const minuteToSeconds = (mins) => {
@@ -199,9 +194,21 @@ const minuteToSeconds = (mins) => {
 };
 
 //Function to toggle the play and pause button
-function togglePlayPause(){
-  const playBtn = document.querySelector('#play-icon');
-  const pauseBtn = document.querySelector('#pause-icon')
-//If clock is reset as a result of stopping it or pausing it, then do this
-  if(reset)
+function togglePlayPause() {
+  const playBtn = document.querySelector("#play-icon");
+  const pauseBtn = document.querySelector("#pause-icon");
+  //If clock is reset as a result of stopping it or pausing it, then do this
+  if (reset) {
+    //We need to start the clock again
+    if (playBtn.classList.contains("hidden")) {
+      playBtn.classList.remove("hidden");
+    }
+    if (!pauseBtn.classList.contains("hidden")) {
+      pauseBtn.classList.add("hidden");
+    }
+  } else {
+    //The clock is running and we can toggle between pause and play
+    playBtn.classList.toggle("hidden");
+    pauseBtn.classList.toggle("hidden");
+  }
 }

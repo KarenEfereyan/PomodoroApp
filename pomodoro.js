@@ -50,7 +50,28 @@ function whatShouldIDo(reset) {
       clockStartRunning = setInterval(() => {
         // decrease time left in workSessionBy 1 for each second
         timeLeftInWorkSession--;
+        displayTimeLeftInSession();
       }, 1000);
     }
   }
+}
+
+//Function displayTimeLeftInSession
+function displayTimeLeftInSession() {
+  //this is in seconds
+  const secondsLeft = timeLeftInWorkSession;
+  let timeDisplayed = "";
+  //No of seconds
+  const seconds = secondsLeft % 60;
+  //no of mins
+  const minutes = parseInt(secondsLeft / 60) % 60;
+  //no of hours
+  let hours = parseInt(secondsLeft / 3600);
+  // add leading zeroes if it's less than 10
+  function addLeadingZeroes(time) {
+    return time < 10 ? `0${time}` : time;
+  }
+  if (hours > 0) timeDisplayed += `${hours}:`;
+  timeDisplayed += `${addLeadingZeroes(minutes)}:${addLeadingZeroes(seconds)}`;
+  pomoTimer.innerText = timeDisplayed.toString();
 }

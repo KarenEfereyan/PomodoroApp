@@ -13,6 +13,8 @@ let isClockRunning = false;
 let workSession = 1500; //25mins
 let timeLeftInWorkSession = 1500; //25mins, this reduces as the clock counts down
 let breakSession = 300; //5mins, it can be changed as needed
+let sessionType = "Work"; //Is this a work or break session?
+let timeSpentInCurrentSession = 0; //This increases for every second spent in the currentSession
 
 // Attach event listeners to all three buttons
 // START CLOCK BUTTON
@@ -50,7 +52,8 @@ function whatShouldIDo(reset) {
       //FUNCTION TO START THE CLOCK
       clockStartRunning = setInterval(() => {
         // decrease time left in workSessionBy 1 for each second
-        timeLeftInWorkSession--;
+        //timeLeftInWorkSession--;
+        toggleSessionType();
         displayTimeLeftInSession();
       }, 1000);
     }
@@ -86,5 +89,27 @@ function stopClockRunning() {
   // set the timer back to the original value
   timeLeftInWorkSession = workSession;
   // update the timer display
+  displayTimeLeftInSession();
+}
+
+//Function to toggle between work and break sessions
+function toggleSessionType() {
+  if (timeLeftInWorkSession > 0) {
+    //keep counting down
+    timeLeftInWorkSession--;
+  } else if (timeLeftInWorkSession === 0) {
+    //timer is over, toggle work and break sessions
+    if (sessionType === "Work") {
+      //Update the timeLeft to the breakSession Duration
+      timeLeftInWorkSession = breakSession;
+      displaySessionLog("Work");
+      //update the sessionType to break
+      type = "Break";
+    } else {
+      timeLeftInWorkSession = workSession;
+      type = "Work";
+      displaySessionLog("Break");
+    }
+  }
   displayTimeLeftInSession();
 }

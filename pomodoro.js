@@ -38,6 +38,7 @@ function whatShouldIDo(reset) {
   //Defines what should be done when each button is clicked
   if (reset) {
     //FUNCTION TO STOP THE TIMER AND MAYBE RESET THE DURATION OF THE CLOCK
+    stopClockRunning();
   } else {
     if (isClockRunning === true) {
       //FUNCTION TO PAUSE THE CLOCK
@@ -74,4 +75,16 @@ function displayTimeLeftInSession() {
   if (hours > 0) timeDisplayed += `${hours}:`;
   timeDisplayed += `${addLeadingZeroes(minutes)}:${addLeadingZeroes(seconds)}`;
   pomoTimer.innerText = timeDisplayed.toString();
+}
+
+//Function to stop the clock from running
+function stopClockRunning() {
+  // 1) reset the timer
+  clearInterval(clockStartRunning);
+  // 2) update our variable to reflect that the timer is stopped
+  isClockRunning = false;
+  // set the timer back to the original value
+  timeLeftInWorkSession = workSession;
+  // update the timer display
+  displayTimeLeftInSession();
 }

@@ -17,23 +17,34 @@ let breakSession = 300; //5mins, it can be changed as needed
 // Attach event listeners to all three buttons
 // START CLOCK BUTTON
 startClock.addEventListener("click", () => {
-  alert("Hey! I start the clock");
-  //toggleClock();
+  //alert("Hey! I start the clock");
+  whatShouldIDo();
 });
 
 // PAUSE CLOCK BUTTON
 pauseClock.addEventListener("click", () => {
-  alert("Hey! I pause the clock");
-  //toggleClock();
+  //alert("Hey! I pause the clock");
+  whatShouldIDo();
 });
 
 // STOP CLOCK BUTTON
 stopClock.addEventListener("click", () => {
-  alert("I stop the clock completely");
-  //toggleClock(true);
+  //alert("I stop the clock completely");
+  whatShouldIDo(true); //I wanna stop the clock when its already running
 });
 
 //Pomodoro App Functions
-function whatShouldIDo() {
+function whatShouldIDo(reset) {
   //Defines what should be done when each button is clicked
+  if (reset) {
+    //FUNCTION TO STOP THE TIMER AND MAYBE RESET THE DURATION OF THE CLOCK
+  } else {
+    if (isClockRunning === true) {
+      //FUNCTION TO PAUSE THE CLOCK
+      isClockRunning = false;
+    } else {
+      //FUNCTION TO START THE CLOCK
+      isClockRunning = true;
+    }
+  }
 }

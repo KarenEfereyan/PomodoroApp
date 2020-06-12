@@ -15,19 +15,19 @@ let timeLeftInWorkSession = 1500; //25mins, this reduces as the clock counts dow
 let breakSession = 300; //5mins, it can be changed as needed
 
 // Attach event listeners to all three buttons
-// START
+// START CLOCK BUTTON
 startClock.addEventListener("click", () => {
   alert("Hey! I start the clock");
   //toggleClock();
 });
 
-// PAUSE
+// PAUSE CLOCK BUTTON
 pauseClock.addEventListener("click", () => {
   alert("Hey! I pause the clock");
   //toggleClock();
 });
 
-// STOP
+// STOP CLOCK BUTTON
 stopClock.addEventListener("click", () => {
   alert("I stop the clock completely");
   //toggleClock(true);

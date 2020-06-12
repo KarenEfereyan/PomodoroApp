@@ -11,7 +11,7 @@ let isClockRunning = false;
 
 //Work sessionTime
 let workSession = 1500; //25mins
-let timeLeftInWorkSession = 1500; //25mins, this reduces as the clock counts down
+let timeLeftInSession = 1500; //25mins, this reduces as the clock counts down
 let breakSession = 300; //5mins, it can be changed as needed
 let sessionType = "Work"; //Is this a work or break session?
 let timeSpentInCurrentSession = 0; //This increases for every second spent in the currentSession
@@ -52,7 +52,7 @@ function whatShouldIDo(reset) {
       //FUNCTION TO START THE CLOCK
       clockStartRunning = setInterval(() => {
         // decrease time left in workSessionBy 1 for each second
-        //timeLeftInWorkSession--;
+        //timeLeftInSession--;
         toggleSessionType();
         displayTimeLeftInSession();
       }, 1000);
@@ -63,7 +63,7 @@ function whatShouldIDo(reset) {
 //Function displayTimeLeftInSession
 function displayTimeLeftInSession() {
   //this is in seconds
-  const secondsLeft = timeLeftInWorkSession;
+  const secondsLeft = timeLeftInSession;
   let timeDisplayed = "";
   //No of seconds
   const seconds = secondsLeft % 60;
@@ -87,29 +87,45 @@ function stopClockRunning() {
   // 2) update our variable to reflect that the timer is stopped
   isClockRunning = false;
   // set the timer back to the original value
-  timeLeftInWorkSession = workSession;
+  timeLeftInSession = workSession;
+  timeSpentInCurrentSession = 0;
   // update the timer display
   displayTimeLeftInSession();
 }
 
 //Function to toggle between work and break sessions
 function toggleSessionType() {
-  if (timeLeftInWorkSession > 0) {
+  if (timeLeftInSession > 0) {
     //keep counting down
-    timeLeftInWorkSession--;
-  } else if (timeLeftInWorkSession === 0) {
+    timeLeftInSession--;
+    timeSpentInCurrentSession++;
+  } else if (timeLeftInSession === 0) {
+    timeSpentInCurrentSession = 0;
     //timer is over, toggle work and break sessions
     if (sessionType === "Work") {
       //Update the timeLeft to the breakSession Duration
-      timeLeftInWorkSession = breakSession;
+      timeLeftInSession = breakSession;
       displaySessionLog("Work");
       //update the sessionType to break
       type = "Break";
     } else {
-      timeLeftInWorkSession = workSession;
+      timeLeftInSession = workSession;
       type = "Work";
       displaySessionLog("Break");
     }
   }
   displayTimeLeftInSession();
+}
+
+//Function to display session log
+function displaySessionLog(sessionType) {
+  const pomoSessions = document.querySelector("#pomodoro-sessions");
+  //Append list item
+  const li = document.createElement("li");
+  let sessionTag = sessionType;
+  let elapsedTime = parseInt(timeSpentInCurrentSession / 60);
+  elapsedTime = elapsedTime > 0 ? elapsedTime : "<1";
+  const text = document.createTextNode(`${sessionTag} : ${elapsedTime} min`);
+  li.appendChild(text);
+  pomoSessions.appendChild(li);
 }

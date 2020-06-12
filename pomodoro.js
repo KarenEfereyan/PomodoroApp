@@ -60,6 +60,7 @@ breakTime.addEventListener("input", () => {
 
 //POMODORO APP FUNCTIONS
 function whatShouldIDo(reset) {
+  togglePlayPause(reset);
   //Defines what should be done when each button is clicked
   if (reset) {
     //FUNCTION TO STOP THE TIMER AND MAYBE RESET THE DURATION OF THE CLOCK
@@ -83,7 +84,9 @@ function whatShouldIDo(reset) {
         toggleSessionType();
         displayTimeLeftInSession();
       }, 1000);
+      isClockRunning = true;
     }
+    showStopIcon();
   }
 }
 
@@ -194,7 +197,7 @@ const minuteToSeconds = (mins) => {
 };
 
 //Function to toggle the play and pause button
-function togglePlayPause() {
+function togglePlayPause(reset) {
   const playBtn = document.querySelector("#play-icon");
   const pauseBtn = document.querySelector("#pause-icon");
   //If clock is reset as a result of stopping it or pausing it, then do this
@@ -211,4 +214,10 @@ function togglePlayPause() {
     playBtn.classList.toggle("hidden");
     pauseBtn.classList.toggle("hidden");
   }
+}
+
+//Function to show stop button
+function showStopIcon() {
+  const stopBtn = document.querySelector("#pomodoro-stop");
+  stopBtn.classList.remove("hidden");
 }

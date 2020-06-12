@@ -1,13 +1,14 @@
 //SELECT THE ELEMENTS FROM THE DOM THAT ARE NEEDED IN THIS SCRIPT
 const pomoTimer = document.querySelector("#pomodoro-timer");
 const startClock = document.querySelector("#pomodoro-start");
-const pauseClock = document.querySelector("#pomodoro-pause");
+//const pauseClock = document.querySelector("#pomodoro-pause");
 const stopClock = document.querySelector("#pomodoro-stop");
 
 //Variable Declarations
 
 //We need to know if the clock is already running before deciding what to do
 let isClockRunning = false;
+let isClockStopped = true;
 
 //Work sessionTime
 let workSession = 1500; //25mins
@@ -17,14 +18,25 @@ let sessionType = "Work"; //Is this a work or break session?
 let timeSpentInCurrentSession = 0; //This increases for every second spent in the currentSession
 let currentTaskTag = document.querySelector("#pomodoro-task");
 
+//This holds the new values that will be applied at the beginning of a new session
+let newWorkSession;
+let newBreakSession;
+
+let workTime = document.querySelector("#input-work-duration");
+let breakTime = document.querySelector("#input-break-duration");
+
+workTime.value = "25"; //just set it to a string of 25mins
+breakTime.value = "5"; //set to a string of 5mins
+
 // Attach event listeners to all three buttons
+
 // START CLOCK BUTTON
 startClock.addEventListener("click", () => {
   //alert("Hey! I start the clock");
   whatShouldIDo();
 });
 
-// PAUSE CLOCK BUTTON
+// PAUSE CLOCK BUTTON : NO LONGER NECESSARY AS WE ARE JUST TOGGLING
 pauseClock.addEventListener("click", () => {
   //alert("Hey! I pause the clock");
   whatShouldIDo();
@@ -36,13 +48,27 @@ stopClock.addEventListener("click", () => {
   whatShouldIDo(true); //I wanna stop the clock when its already running
 });
 
-//Pomodoro App Functions
+// UPDATED WORK TIME
+workTime.addEventListener("input", () => {
+  newWorkSession = minuteToSeconds(workTime.value);
+});
+
+// UPDATE PAUSE TIME
+breakTime.addEventListener("input", () => {
+  newBreakSession = minuteToSeconds(breakTime.value);
+});
+
+//POMODORO APP FUNCTIONS
 function whatShouldIDo(reset) {
   //Defines what should be done when each button is clicked
   if (reset) {
     //FUNCTION TO STOP THE TIMER AND MAYBE RESET THE DURATION OF THE CLOCK
     stopClockRunning();
   } else {
+    if (isClockStopped) {
+      setUpdatedTimers();
+      isClockStopped = false;
+    }
     if (isClockRunning === true) {
       //FUNCTION TO PAUSE THE CLOCK
       clearInterval(clockStartRunning);
@@ -83,17 +109,20 @@ function displayTimeLeftInSession() {
 
 //Function to stop the clock from running
 function stopClockRunning() {
+  setUpdatedTimers(
+  )
   displaySessionLog(sessionType);
   // 1) reset the timer
   clearInterval(clockStartRunning);
+  isClockStopped=true;
   // 2) update our variable to reflect that the timer is stopped
   isClockRunning = false;
   // set the timer back to the original value
   timeLeftInSession = workSession;
-  timeSpentInCurrentSession = 0;
   // update the timer display
   displayTimeLeftInSession();
   sessionType = "Work";
+  timeSpentInCurrentSession = 0;
 }
 
 //Function to toggle between work and break sessions
@@ -110,12 +139,14 @@ function toggleSessionType() {
       timeLeftInSession = breakSession;
       displaySessionLog("Work");
       //update the sessionType to break
-      type = "Break";
+      sessionType = "Break";
+      setUpdatedTimers();
       currentTaskTag.value = "Break";
       currentTaskTag.disabled = true;
     } else {
       timeLeftInSession = workSession;
       sessionType = "Work";
+      setUpdatedTimers();
       if (currentTaskTag.value === "Break") {
         currentTaskTag.value = workSessionLabel;
       }
@@ -143,4 +174,34 @@ function displaySessionLog(sessionType) {
   const text = document.createTextNode(`${sessionTag} : ${elapsedTime} min`);
   li.appendChild(text);
   pomoSessions.appendChild(li);
+}
+
+//Function to updateTimer to what the UserInputs
+//1. Check to see if there's an updated session duration for work and break
+//2. If yes, it sets the new work and break sessions to that value
+function setUpdatedTimers(){
+  if (sessionType === "Work") {
+    timeLeftInSession= newWorkSession
+      ? newWorkSession
+      : workSession
+    workSession = timeLeftInSession;
+  } else {
+    timeLeftInSession = newBreakSession
+      ? newBreakSession
+      : breakSession
+    breakSession = timeLeftInSession;
+  }
+};
+
+//Function to change the string minutes to seconds
+const minuteToSeconds = (mins) => {
+  return mins * 60;
+};
+
+//Function to toggle the play and pause button
+function togglePlayPause(){
+  const playBtn = document.querySelector('#play-icon');
+  const pauseBtn = document.querySelector('#pause-icon')
+//If clock is reset as a result of stopping it or pausing it, then do this
+  if(reset)
 }

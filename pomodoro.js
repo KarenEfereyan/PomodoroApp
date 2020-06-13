@@ -34,7 +34,7 @@ const progressBar = new ProgressBar.Circle("#pomodoro-timer", {
   text: {
     value: "25:00",
   },
-  trailColor: "hotpink",
+  trailColor: "white",
 });
 
 // Attach event listeners to all three buttons

@@ -58,29 +58,18 @@ const minuteToSeconds = (mins) => {
   return mins * 60;
 };
 
-//2. Function to toggle the play and pause button
-const togglePlayPause = (reset) => {
-  const playBtn = document.querySelector("#play-icon");
-  const pauseBtn = document.querySelector("#pause-icon");
-  if (reset) {
-    if (playBtn.classList.contains("hidden")) {
-      playBtn.classList.remove("hidden");
-    }
-    if (!pauseBtn.classList.contains("hidden")) {
-      pauseBtn.classList.add("hidden");
-    }
-  } else {
-    playBtn.classList.toggle("hidden");
-    pauseBtn.classList.toggle("hidden");
-  }
-};
+//2. Function to display the progress bar
+function calculateSessionProgress() {
+  //How fast is the session completing
+  const sessionDuration = sessionType === "Work" ? workSession : breakSession;
+  return (timeSpentInCurrentSession / sessionDuration) * 10;
+}
 
 //3. Function that decides what should be done on button clicks
 const whatShouldIDo = (reset) => {
-  togglePlayPause(reset);
   //Defines what should be done when each button is clicked
   if (reset) {
-    //FUNCTION TO STOP THE TIMER AND MAYBE RESET THE DURATION OF THE CLOCK
+    //Stop the clock
     stopClockRunning();
   } else {
     if (isClockStopped) {
@@ -88,13 +77,13 @@ const whatShouldIDo = (reset) => {
       isClockStopped = false;
     }
     if (isClockRunning === true) {
-      //FUNCTION TO PAUSE THE CLOCK
+      //Pause the clock
       clearInterval(clockStartRunning);
       isClockRunning = false;
     } else {
       //The clock is now running
       isClockRunning = true;
-      //FUNCTION TO START THE CLOCK
+      //Start the clock
       clockStartRunning = setInterval(() => {
         // decrease time left in workSessionBy 1 for each second
         //timeLeftInSession--;
@@ -104,11 +93,10 @@ const whatShouldIDo = (reset) => {
       }, 1000);
       isClockRunning = true;
     }
-    showStopIcon();
   }
 };
 
-//Function displayTimeLeftInSession
+//4.Function displayTimeLeftInSession
 function displayTimeLeftInSession() {
   //this is in seconds
   const secondsLeft = timeLeftInSession;
@@ -126,12 +114,11 @@ function displayTimeLeftInSession() {
   if (hours > 0) timeDisplayed += `${hours}:`;
   timeDisplayed += `${addLeadingZeroes(minutes)}:${addLeadingZeroes(seconds)}`;
   progressBar.text.innerText = timeDisplayed.toString();
-  // pomoTimer.innerText = timeDisplayed.toString();
 }
 
-//Function to stop the clock from running
+//5.Function to stop the clock from running
 function stopClockRunning() {
-  setUpdatedTimers();
+  setUpdatedTimers(); //The updated timers will reflect at the start of every new session
   displaySessionLog(sessionType);
   // 1) reset the timer
   clearInterval(clockStartRunning);
@@ -146,7 +133,7 @@ function stopClockRunning() {
   timeSpentInCurrentSession = 0;
 }
 
-//Function to toggle between work and break sessions
+//6.Function to toggle between work and break sessions
 function toggleSessionType() {
   if (timeLeftInSession > 0) {
     //keep counting down
@@ -178,7 +165,7 @@ function toggleSessionType() {
   displayTimeLeftInSession();
 }
 
-//Function to display session log
+//7.Function to display session log
 function displaySessionLog(sessionType) {
   const pomoSessions = document.querySelector("#pomodoro-sessions");
   //Append list item
@@ -197,7 +184,7 @@ function displaySessionLog(sessionType) {
   pomoSessions.appendChild(li);
 }
 
-//Function to updateTimer to what the UserInputs
+//8.Function to updateTimer to what the UserInputs
 //1. Check to see if there's an updated session duration for work and break
 //2. If yes, it sets the new work and break sessions to that value
 function setUpdatedTimers() {
@@ -208,17 +195,4 @@ function setUpdatedTimers() {
     timeLeftInSession = newBreakSession ? newBreakSession : breakSession;
     breakSession = timeLeftInSession;
   }
-}
-
-//Function to show stop button
-function showStopIcon() {
-  const stopBtn = document.querySelector("#pomodoro-stop");
-  stopBtn.classList.remove("hidden");
-}
-
-//Function to display the progress bar
-function calculateSessionProgress() {
-  //How fast is the session completing
-  const sessionDuration = sessionType === "Work" ? workSession : breakSession;
-  return (timeSpentInCurrentSession / sessionDuration) * 10;
 }

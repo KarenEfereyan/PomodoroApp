@@ -1,74 +1,82 @@
-//SELECT THE ELEMENTS FROM THE DOM THAT ARE NEEDED IN THIS SCRIPT
+//Dom Element selection
 const pomoTimer = document.querySelector("#pomodoro-timer");
 const startClock = document.querySelector("#pomodoro-start");
-//const pauseClock = document.querySelector("#pomodoro-pause");
+const pauseClock = document.querySelector("#pomodoro-pause");
 const stopClock = document.querySelector("#pomodoro-stop");
 
 //Variable Declarations
-
-//We need to know if the clock is already running before deciding what to do
-let isClockRunning = false;
-let isClockStopped = true;
-
-//Work sessionTime
+let isClockRunning = false; //Clock is not running
+let isClockStopped = true; //Clock is stopped
 let workSession = 1500; //25mins
-let timeLeftInSession = 1500; //25mins, this reduces as the clock counts down
-let breakSession = 300; //5mins, it can be changed as needed
+let timeLeftInSession = 1500; //25mins
+let breakSession = 300; //5mins
 let sessionType = "Work"; //Is this a work or break session?
 let timeSpentInCurrentSession = 0; //This increases for every second spent in the currentSession
 let currentTaskTag = document.querySelector("#pomodoro-task");
-
-//This holds the new values that will be applied at the beginning of a new session
 let newWorkSession;
 let newBreakSession;
+let inputWorkTime = document.querySelector("#input-work-duration");
+let inputBreakTime = document.querySelector("#input-break-duration");
+inputWorkTime.value = "25";
+inputBreakTime.value = "5";
 
-let workTime = document.querySelector("#input-work-duration");
-let breakTime = document.querySelector("#input-break-duration");
-
-workTime.value = "25"; //just set it to a string of 25mins
-breakTime.value = "5"; //set to a string of 5mins
-
-//ProgressBar Variables
+//ProgressBar Variables : For styling
 const progressBar = new ProgressBar.Circle("#pomodoro-timer", {
-  strokeWidth: 2,
+  strokeWidth: 3,
   text: {
     value: "25:00",
   },
   trailColor: "white",
 });
 
-// Attach event listeners to all three buttons
-
-// START CLOCK BUTTON
+// Attach click event listeners to buttons
 startClock.addEventListener("click", () => {
-  //alert("Hey! I start the clock");
   whatShouldIDo();
 });
 
-// PAUSE CLOCK BUTTON : NO LONGER NECESSARY AS WE ARE JUST TOGGLING
 pauseClock.addEventListener("click", () => {
-  //alert("Hey! I pause the clock");
   whatShouldIDo();
+  //alert("I pause the clock!");
 });
 
-// STOP CLOCK BUTTON
 stopClock.addEventListener("click", () => {
-  //alert("I stop the clock completely");
   whatShouldIDo(true); //I wanna stop the clock when its already running
 });
 
-// UPDATED WORK TIME
-workTime.addEventListener("input", () => {
-  newWorkSession = minuteToSeconds(workTime.value);
+// Attach input event listeners to the inputs
+inputWorkTime.addEventListener("input", () => {
+  newWorkSession = minuteToSeconds(inputWorkTime.value);
 });
 
-// UPDATE PAUSE TIME
-breakTime.addEventListener("input", () => {
-  newBreakSession = minuteToSeconds(breakTime.value);
+inputBreakTime.addEventListener("input", () => {
+  newBreakSession = minuteToSeconds(inputBreakTime.value);
 });
 
 //POMODORO APP FUNCTIONS
-function whatShouldIDo(reset) {
+//1. Function change minutes from input in string to seconds
+const minuteToSeconds = (mins) => {
+  return mins * 60;
+};
+
+//2. Function to toggle the play and pause button
+const togglePlayPause = (reset) => {
+  const playBtn = document.querySelector("#play-icon");
+  const pauseBtn = document.querySelector("#pause-icon");
+  if (reset) {
+    if (playBtn.classList.contains("hidden")) {
+      playBtn.classList.remove("hidden");
+    }
+    if (!pauseBtn.classList.contains("hidden")) {
+      pauseBtn.classList.add("hidden");
+    }
+  } else {
+    playBtn.classList.toggle("hidden");
+    pauseBtn.classList.toggle("hidden");
+  }
+};
+
+//3. Function that decides what should be done on button clicks
+const whatShouldIDo = (reset) => {
   togglePlayPause(reset);
   //Defines what should be done when each button is clicked
   if (reset) {
@@ -98,7 +106,7 @@ function whatShouldIDo(reset) {
     }
     showStopIcon();
   }
-}
+};
 
 //Function displayTimeLeftInSession
 function displayTimeLeftInSession() {
@@ -199,31 +207,6 @@ function setUpdatedTimers() {
   } else {
     timeLeftInSession = newBreakSession ? newBreakSession : breakSession;
     breakSession = timeLeftInSession;
-  }
-}
-
-//Function to change the string minutes to seconds
-const minuteToSeconds = (mins) => {
-  return mins * 60;
-};
-
-//Function to toggle the play and pause button
-function togglePlayPause(reset) {
-  const playBtn = document.querySelector("#play-icon");
-  const pauseBtn = document.querySelector("#pause-icon");
-  //If clock is reset as a result of stopping it or pausing it, then do this
-  if (reset) {
-    //We need to start the clock again
-    if (playBtn.classList.contains("hidden")) {
-      playBtn.classList.remove("hidden");
-    }
-    if (!pauseBtn.classList.contains("hidden")) {
-      pauseBtn.classList.add("hidden");
-    }
-  } else {
-    //The clock is running and we can toggle between pause and play
-    playBtn.classList.toggle("hidden");
-    pauseBtn.classList.toggle("hidden");
   }
 }
 

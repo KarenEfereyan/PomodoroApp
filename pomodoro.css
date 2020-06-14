@@ -18,8 +18,10 @@ body {
   height: 30px;
 }
 #pomodoro-buttons {
-  width: 10%;
-  margin: 20px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0;
 }
 .progressbar-text {
   font-size: 70px;
@@ -30,9 +32,6 @@ body {
 }
 button {
   padding: 15px;
-}
-.fa-play {
-  margin-right: 20px;
 }
 #pomodoro-clock-title {
   text-align: center;

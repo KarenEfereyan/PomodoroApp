@@ -1,5 +1,5 @@
 body {
-  background-color: yellowgreen;
+  background-color: #414664;
 }
 .hidden {
   display: none;
@@ -24,17 +24,16 @@ body {
   margin: 20px 0;
 }
 .progressbar-text {
-  font-size: 70px;
+  font-size: 80px;
 }
 #pomodoro-buttons .fas {
   font-size: 20px;
-  color: grey;
+  color: #464c6c;
 }
 button {
   padding: 15px;
   margin-right: 5px;
   border: none;
-  border-radius: 50px;
 }
 #pomodoro-clock-title {
   text-align: center;

@@ -27,6 +27,9 @@ const progressBar = new ProgressBar.Circle("#pomodoro-timer", {
     value: "25:00",
   },
   trailColor: "white",
+  trailwidth: 1,
+  fill: "#414664",
+  color: "#cacee8",
 });
 
 // Attach click event listeners to buttons
@@ -59,11 +62,31 @@ const minuteToSeconds = (mins) => {
 };
 
 //2. Function to display the progress bar
-function calculateSessionProgress() {
+const calculateSessionProgress = () => {
   //How fast is the session completing
   const sessionDuration = sessionType === "Work" ? workSession : breakSession;
   return (timeSpentInCurrentSession / sessionDuration) * 10;
-}
+};
+
+//3.Function displayTimeLeftInSession
+const displayTimeLeftInSession = () => {
+  //this is in seconds
+  const secondsLeft = timeLeftInSession;
+  let timeDisplayed = "";
+  //No of seconds
+  const seconds = secondsLeft % 60;
+  //no of mins
+  const minutes = parseInt(secondsLeft / 60) % 60;
+  //no of hours
+  let hours = parseInt(secondsLeft / 3600);
+  // add leading zeroes if it's less than 10
+  const addLeadingZeroes = (time) => {
+    return time < 10 ? `0${time}` : time;
+  };
+  if (hours > 0) timeDisplayed += `${hours}:`;
+  timeDisplayed += `${addLeadingZeroes(minutes)}:${addLeadingZeroes(seconds)}`;
+  progressBar.text.innerText = timeDisplayed.toString();
+};
 
 //3. Function that decides what should be done on button clicks
 const whatShouldIDo = (reset) => {
@@ -72,6 +95,7 @@ const whatShouldIDo = (reset) => {
     //Stop the clock
     stopClockRunning();
   } else {
+    //On play btn
     if (isClockStopped) {
       setUpdatedTimers();
       isClockStopped = false;
@@ -96,29 +120,9 @@ const whatShouldIDo = (reset) => {
   }
 };
 
-//4.Function displayTimeLeftInSession
-function displayTimeLeftInSession() {
-  //this is in seconds
-  const secondsLeft = timeLeftInSession;
-  let timeDisplayed = "";
-  //No of seconds
-  const seconds = secondsLeft % 60;
-  //no of mins
-  const minutes = parseInt(secondsLeft / 60) % 60;
-  //no of hours
-  let hours = parseInt(secondsLeft / 3600);
-  // add leading zeroes if it's less than 10
-  function addLeadingZeroes(time) {
-    return time < 10 ? `0${time}` : time;
-  }
-  if (hours > 0) timeDisplayed += `${hours}:`;
-  timeDisplayed += `${addLeadingZeroes(minutes)}:${addLeadingZeroes(seconds)}`;
-  progressBar.text.innerText = timeDisplayed.toString();
-}
-
 //5.Function to stop the clock from running
 function stopClockRunning() {
-  setUpdatedTimers(); //The updated timers will reflect at the start of every new session
+  //The updated timers will reflect at the start of every new session
   displaySessionLog(sessionType);
   // 1) reset the timer
   clearInterval(clockStartRunning);
@@ -126,6 +130,7 @@ function stopClockRunning() {
   // 2) update our variable to reflect that the timer is stopped
   isClockRunning = false;
   // set the timer back to the original value
+  setUpdatedTimers();
   timeLeftInSession = workSession;
   // update the timer display
   displayTimeLeftInSession();
